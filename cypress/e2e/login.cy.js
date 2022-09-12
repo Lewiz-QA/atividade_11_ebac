@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+const perfil = require('../fixtures/perfil.json')
 
 context('Funcionalidade: Login', () => {
 
@@ -14,7 +15,7 @@ context('Funcionalidade: Login', () => {
     //Obs.: a função fullName() está presente somente nas versões mais recentes do faker
 
     beforeEach(() => {
-        cy.visit('http://lojaebac.ebaconline.art.br/minha-conta/')
+        cy.visit('minha-conta/')
     });
 
     afterEach(() => {
@@ -28,6 +29,27 @@ context('Funcionalidade: Login', () => {
         cy.get('.page-title').contains('Minha Conta', { matchCase: false })
         cy.get('.woocommerce-MyAccount-content > :nth-child(2)').should('contain', 'Olá, teste_aluno20')
         cy.get('a > .hidden-xs').should('contain', 'Welcome teste_aluno20', { matchCase: false })
+    })
+
+    it('Deve realizar login com sucesso com arquivo de dados', () => {
+        cy.get('#username').type(perfil.usuario)
+        cy.get('#password').type(perfil.senha)
+        cy.get('.woocommerce-form > .button').click()
+        cy.get('.page-title').contains('Minha Conta', { matchCase: false })
+        cy.get('.woocommerce-MyAccount-content > :nth-child(2)').should('contain', 'Olá, teste_aluno20')
+        cy.get('a > .hidden-xs').should('contain', 'Welcome teste_aluno20', { matchCase: false })
+    })
+
+    it.only('Deve realizar login com sucesso com Fixture', () => {
+        cy.fixture('perfil').then(dados => {
+            cy.get('#username').type(dados.usuario)
+            cy.get('#password').type(dados.senha, {log: false}) //Para não exibir senha
+            cy.get('.woocommerce-form > .button').click()
+            cy.get('.page-title').contains('Minha Conta', { matchCase: false })
+            cy.get('.woocommerce-MyAccount-content > :nth-child(2)').should('contain', 'Olá, teste_aluno20')
+            cy.get('a > .hidden-xs').should('contain', 'Welcome teste_aluno20', { matchCase: false })
+        }) //arquivo json na pasta fixture
+        
     })
 
     it('Deve exibir erro ao inserir e-mail inválido', () => {
