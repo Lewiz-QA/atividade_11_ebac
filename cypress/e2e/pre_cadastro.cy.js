@@ -107,4 +107,11 @@ describe('Funcionalidade: Pré Cadastro', () => {
         cy.get('.woocommerce-error').should('contain', 'Este endereço de e-mail já está registrado.')
 
     });
+
+    it.only('Deve completar o pré-cadastro com sucesso usando Comandos Customizados', () => {
+        let emailFaker2 = faker.internet.email()
+        cy.preCadastro(emailFaker2, 'senha_teste', 'Lewiz', 'Hamilton')
+
+        cy.get('.woocommerce-message').should('contain', 'Detalhes da conta modificados com sucesso.')
+    });
 });

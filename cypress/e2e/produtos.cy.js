@@ -25,6 +25,7 @@ describe('Funcionalidade: Adicionar Produtos ao Carrinho', () => {
         cy.get(':nth-child(2) > .value > .variable-items-wrapper > .variable-item').click()
         cy.get('.input-text').clear().type(qtd)
         cy.get('.single_add_to_cart_button').click()
+
         cy.get('.dropdown-toggle > .mini-cart-items').should('contain', qtd)
 
         cy.get('.woocommerce-message').should('contain', qtd + ' × “Argus All-Weather Tank” foram adicionados no seu carrinho.')
@@ -120,6 +121,12 @@ describe('Funcionalidade: Adicionar Produtos ao Carrinho', () => {
         cy.get('.input-text').then(($input) => {
             expect($input[0].validationMessage).to.contain('O valor deve ser menor ou igual a')
         })
+    });
+
+    it.only('Deve adicionar ao carrinho com Comando Customizado', () => {
+        cy.addProdutos('Argus All-Weather Tank', 'M', 3)
+
+        cy.addProdutos('Atlas Fitness Tank', 'XL', 5)
     });
 
 });
